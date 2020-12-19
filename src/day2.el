@@ -43,8 +43,8 @@
 	   (character (string-to-char (substring (nth 1 split-line) 0 1)))
 	   (password (nth 2 split-line)))
       (when (xor
-	     (char-equal (string-to-char (string (elt password index-a))) character)
-	     (char-equal (string-to-char (string (elt password index-b))) character))
+	     (char-equal (elt password index-a) character)
+	     (char-equal (elt password index-b) character))
 	(setq count (1+ count)))))
   (message "%d" count))
 ;;; day2.el ends here
