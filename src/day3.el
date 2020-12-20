@@ -7,7 +7,7 @@
   "Move point right one character without moving to the next line.
 If point is at the end of the line, move it to the beginning of the current line."
   (forward-char)
-  (when (string-equal (string (char-after)) "\n")
+  (when (string-equal (thing-at-point 'char) "\n")
     (beginning-of-line)))
 
 (defun next-line-same-column ()
