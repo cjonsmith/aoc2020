@@ -16,22 +16,34 @@ If point is at the end of the line, move it to the beginning of the current line
     (forward-line)
     (move-to-column column)))
 
-(defun traverse ()
-  "Move point three times to the right, then down one line.
+(defun traverse (right down)
+  "Move point RIGHT times to the right, then down DOWN line.
 If when moving right the last non-newline character is found, move to the
 beginning of the line.  When moving down, point will occupy the same column
 that it did in the previous line."
-  (dotimes (_ 3)
+  (dotimes (_ right)
     (safe-move-right))
-  (next-line-same-column))
+  (dotimes (_ down)
+    (next-line-same-column)))
 
-(with-temp-buffer
-  (insert-file-contents "../input/day3.txt")
+(defun number-of-trees (right down)
+  "Return the number of trees encountered when traversing the hill.
+The route taken down the hill is determined by moving RIGHT number of times to
+the right, and then moving down DOWN number of times.  If when moving right the
+last non-newline character is found, move to the beginning of the line.  When
+moving down, point will occupy the same column that it did in the previous line.
+The sum of trees that were encountered after moving point until the end of the buffer
+is returned."
   (let ((count 0)
 	(num-lines (count-lines (point-min) (point-max))))
     (while (not (equal (line-number-at-pos) num-lines))
-      (traverse)
+      (traverse right down)
       (when (equal (thing-at-point 'char) "#")
 	(setq count (1+ count))))
-    (message "%d" count)))
+    count))
+
+
+(with-temp-buffer
+  (insert-file-contents "../input/day3.txt")
+  (message "%d" (number-of-trees 3 1)))
 ;;; day3.el ends here
