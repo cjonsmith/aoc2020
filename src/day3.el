@@ -34,16 +34,26 @@ last non-newline character is found, move to the beginning of the line.  When
 moving down, point will occupy the same column that it did in the previous line.
 The sum of trees that were encountered after moving point until the end of the buffer
 is returned."
-  (let ((count 0)
-	(num-lines (count-lines (point-min) (point-max))))
-    (while (not (equal (line-number-at-pos) num-lines))
-      (traverse right down)
-      (when (equal (thing-at-point 'char) "#")
-	(setq count (1+ count))))
-    count))
+  (save-excursion
+    (let ((count 0)
+	  (num-lines (count-lines (point-min) (point-max))))
+      (while (not (equal (line-number-at-pos) num-lines))
+	(traverse right down)
+	(when (equal (thing-at-point 'char) "#")
+	  (setq count (1+ count))))
+      count)))
 
-
+;; Part 1
 (with-temp-buffer
   (insert-file-contents "../input/day3.txt")
   (message "%d" (number-of-trees 3 1)))
+
+;; Part 2
+(with-temp-buffer
+  (insert-file-contents "../input/day3.txt")
+  (message "%d" (* (number-of-trees 1 1)
+		   (number-of-trees 3 1)
+		   (number-of-trees 5 1)
+		   (number-of-trees 7 1)
+		   (number-of-trees 1 2))))
 ;;; day3.el ends here
