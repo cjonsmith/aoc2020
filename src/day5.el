@@ -3,7 +3,8 @@
 ;;; Code:
 (with-temp-buffer
   (insert-file-contents "../input/day5.txt")
-  (let ((largest-id 0))
+  (let ((largest-id 0)
+	(seat-ids ()))
     (while (not (eobp))
       (let ((front 0)
 	    (back 127)
@@ -23,7 +24,13 @@
 	;; `left' and `right' should be equal as well.  They can be
 	;; used interchangably following this point.
 	(when (> (+ (* front 8) left) largest-id)
-	  (setq largest-id (+ (* front 8) left))))
+	  (setq largest-id (+ (* front 8) left)))
+	(push (+ (* front 8) left) seat-ids))
       (forward-char))
-    largest-id))
+    (let ((prev (car seat-ids)))
+      (dolist (id (sort (cdr seat-ids) '<))
+	(when (not (equal id (1+ prev)))
+	  (message "Your (possible) seat number: %d" (1- id)))
+	(setq prev id)))
+    (message "Largest seat id: %d" largest-id)))
 ;;; day5.el ends here
